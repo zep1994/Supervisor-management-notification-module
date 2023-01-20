@@ -1,14 +1,22 @@
 version: "3.8"
 services:
   react-app:
+    build: /client
     image: react-docker
     stdin_open: true
+    expose:
+      - 3000
     ports: 
       - "3000:3000"
     depends_on:
       - api-server
     tty: true
+    command: npm run start
   api-server:
+    build: /api
+    expose:
+      - 5000
     image: node-docker
     ports:
       - "5000:5000"
+    command: npm run start
