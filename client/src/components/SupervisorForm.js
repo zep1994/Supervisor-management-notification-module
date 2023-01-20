@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Select from 'react-select'
 
 class SupervisorForm extends Component{
 
@@ -66,6 +67,7 @@ class SupervisorForm extends Component{
                         <br />
                         <input type="text" placeholder='Contact Method' name="contactMethod" onChange= {this.handleChange}/>
                         <br />
+                        <Select options={this.state.selectOptions} />
                         <input type="text" placeholder='Supervisor' name="supervisor" onChange= {this.handleChange}/>
                         <br />
                     </label>
