@@ -16,6 +16,17 @@ app.get('/api/supervisors', function (req, res, next){
       fetch("https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers")
       .then(res => res.json())
       .then((json) => {
+        for (let i of json) {
+          delete i['phone']
+          delete i['email']
+          delete i['identificationNumber']
+          if ( isNaN(i['jurisdiction']) === false) {
+            delete i['jurisdiction']
+          }
+        }
+        json.sort(function (a, b) {
+          return a["jurisdiction"] > b["jurisdiction"]
+        })
         res.send(json)
       })
       .catch(err => console.log(err))
