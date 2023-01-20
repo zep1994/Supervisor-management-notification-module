@@ -12,21 +12,33 @@ app.get('/', function(req, res, next) {
   res.send("Home")
 })
 
+function containsNumbers(str) {
+  return /\d/.test(str);
+}
+
 app.get('/api/supervisors', function (req, res, next){
       fetch("https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers")
       .then(res => res.json())
       .then((json) => {
-        for (let i of json) {
-          delete i['phone']
-          delete i['email']
-          delete i['identificationNumber']
-          if ( isNaN(i['jurisdiction']) === false) {
-            delete i['jurisdiction']
-          }
-        }
-        json.sort(function (a, b) {
-          return a["jurisdiction"] > b["jurisdiction"]
+          json = json.sort((a, b) => {
+            if (a.firstName > b.firstName) return 1;
+            else if (a.firstName < b.firstName) return -1;
+            if (a.lastName > b.lastName) return 1;
+            else if (a.lastName < b.lastName) return -1;
+            if (a.jurisdiction > b.jurisdiction) return 1;
+            else if (a.jurisdiction < b.jurisdiction) return -1;
         })
+          for (let i of json) {
+            delete i['phone']
+            delete i['email']
+            delete i['identificationNumber']
+            if (containsNumbers(i['jurisdiction']) === true) {
+              delete i['jurisdiction']
+            }
+            if (/\d/.test(i['jurisdiction']) === true) {
+              delete i['jurisdiction']
+            }
+        }
         res.send(json)
       })
       .catch(err => console.log(err))
