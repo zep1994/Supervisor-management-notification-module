@@ -11,9 +11,11 @@ class SupervisorForm extends Component{
         email: "",
         phone: "",
         contactMethod: "",
-        supervisor: ""
+        supervisor: "",
+        entries: []
         }
     }
+
 
     handleSubmit = (event) => {
         event.preventDefault()
@@ -25,8 +27,28 @@ class SupervisorForm extends Component{
     }
 
     handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
-      }
+        this.setState(prevState => ({ 
+            [e.target.name]: e.target.value 
+        }))
+    }
+
+    componentDidMount() {
+        this.fetchApiToEntries("http://localhost:3000/api/supervisors")
+    }
+
+    fetchApiToEntries = (url) => {
+        fetch(url)
+            .then(res => res.json())
+            .then((entries) => {
+                this.setState({
+                    ...this.state,
+                    entries
+                })
+                console.log(entries)
+            })
+            .catch((error) => console.log(error));
+    }
+    
 
     render() {
         return (

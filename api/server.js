@@ -5,6 +5,7 @@ var request = require('request');
 const cors = require('cors')
 const port = 3000
 
+const url = "https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers"
 
 app.use(cors())
 app.use(express.json())
@@ -12,17 +13,13 @@ app.use(express.json())
 // const fetch = require('node-fetch')
 //   .then(({default: fetch}) => fetch(...args));
 
-app.get('/', function (req, res, next){
-    // try {
-    //     const apiResponse = await fetch("https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers")
-    //     const apiResponseJson = await apiResponse.json()
-
-    //     console.log(apiResponseJson)
-    //     res.send("Loading...")
-    // } catch {
-    //     console.log("error")
-    // }
-    res.send("load")
+app.get('/api/supervisors', function (req, res, next){
+      fetch("https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers")
+      .then(res => res.json())
+      .then((json) => {
+        res.send(json)
+      })
+      .catch(err => console.log(err))
 })
 
 app.post('/hello', function (req, res) {
