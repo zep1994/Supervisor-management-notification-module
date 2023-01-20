@@ -11,9 +11,11 @@ class SupervisorForm extends Component{
         email: "",
         phone: "",
         contactMethod: "",
-        supervisor: ""
+        supervisor: "",
+        entries: []
         }
     }
+
 
     handleSubmit = (event) => {
         event.preventDefault()
@@ -21,12 +23,32 @@ class SupervisorForm extends Component{
         axios.post('http://localhost:3000/hello', {
             firstName, lastName, email, phone, contactMethod, supervisor        
         })
-        .then(res=>{console.log(res)})
+        .then(res=>{res.send(res)})
     }
 
     handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
-      }
+        this.setState(prevState => ({ 
+            [e.target.name]: e.target.value 
+        }))
+    }
+
+    componentDidMount() {
+        this.fetchApiToEntries("http://localhost:3000/api/supervisors")
+    }
+
+    fetchApiToEntries = (url) => {
+        fetch(url)
+            .then(res => res.json())
+            .then((entries) => {
+                this.setState({
+                    ...this.state,
+                    entries
+                })
+                console.log(entries)
+            })
+            .catch((error) => console.log(error));
+    }
+    
 
     render() {
         return (
@@ -44,6 +66,7 @@ class SupervisorForm extends Component{
                         <br />
                         <input type="text" placeholder='Contact Method' name="contactMethod" onChange= {this.handleChange}/>
                         <br />
+                        <Select options={this.state.selectOptions} />
                         <input type="text" placeholder='Supervisor' name="supervisor" onChange= {this.handleChange}/>
                         <br />
                     </label>
