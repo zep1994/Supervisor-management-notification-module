@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const port = 3000
+const port = 5000
 
 const url = "https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers"
 

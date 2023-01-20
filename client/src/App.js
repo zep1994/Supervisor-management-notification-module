@@ -1,6 +1,5 @@
 import './App.css';
-import React, { Component } from 'react';
-import axios from 'axios';
+import React from 'react';
 import SupervisorForm from './components/SupervisorForm';
 
 

@@ -1,12 +1,19 @@
 #====== Config ======
-FROM node:alpine
+
+FROM node:18
+
 # Set the working directory to /app inside the container
-WORKDIR /app
+WORKDIR /usr/src/app
+
 # Copy app files
-COPY package.json .
-COPY *.js .
-# ==== BUILD =====
+COPY ./package.json ./
+
 RUN npm install
+
+# Bundle app source
+COPY . .
+
+EXPOSE 3000
+
 # ==== RUN =======
-EXPOSE 300
-ENTRYPOINT ["npx", "serve", "start"]
+CMD ["npm", "run", "start"]

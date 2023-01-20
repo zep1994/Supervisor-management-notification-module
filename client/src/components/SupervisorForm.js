@@ -23,12 +23,12 @@ const SupervisorForm = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        if (/\d/.test(firstName) || /\d/.test(lastName) == true) {
+        if (/\d/.test(firstName) || /\d/.test(lastName) === true) {
             event.preventDefault()
             alert("Please remove numbers From your name")
             return false
         } 
-        axios.post('http://localhost:3000/api/submit', {
+        axios.post('http://localhost:5000/api/submit', {
             firstName, lastName, email, phone, preferredMethod, supervisor        
         })
         .then(res=>{console.log(res)})

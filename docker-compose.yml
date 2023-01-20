@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  react-app:
+    image: react-docker
+    stdin_open: true
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - api-server
+    tty: true
+  api-server:
+    image: node-docker
+    ports:
+      - "5000:5000"
