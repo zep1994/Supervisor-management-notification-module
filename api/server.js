@@ -38,6 +38,8 @@ app.get('/api/supervisors', function (req, res, next){
             if (/\d/.test(i['jurisdiction']) === true) {
               delete i['jurisdiction']
             }
+
+            
         }
         res.send(json)
       })
@@ -47,7 +49,12 @@ app.get('/api/supervisors', function (req, res, next){
 app.post('/api/submit', function (req, res) {
     const body = req.body
     console.log(body)
-    res.json(body)
+    if (body.firstName == "" || body.lastName == "" || body.supervisor == "") {
+      console.log("Please fill out field")
+    } else {
+      console.log(body)
+      res.json(body)
+    }
 })
 
 app.listen(port, () => {
