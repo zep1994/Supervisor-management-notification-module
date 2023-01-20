@@ -1,81 +1,76 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Select from 'react-select'
 
-class SupervisorForm extends Component{
+const URL = 'http://localhost:3000/api'
 
-    constructor(props) {
-        super(props) 
-        this.state = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        contactMethod: "",
-        supervisor: "",
-        entries: []
-        }
-    }
+const SupervisorForm = () => {
 
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState('')
+    const [preferredMethod, setPrefferedMethod] = useState('')
+    const [supervisor, setSupervisor] = useState('')
+    const [submitted, setSubmitted] = useState(false)
+    const [selectableOptions, setSelectableOptions] = useState([])
 
-    handleSubmit = (event) => {
-        event.preventDefault()
-        const {firstName, lastName, email, phone, contactMethod, supervisor} = this.state
-        axios.post('http://localhost:3000/hello', {
-            firstName, lastName, email, phone, contactMethod, supervisor        
-        })
-        .then(res=>{console.log(res)})
-    }
-
-    handleChange = (e) => {
-        this.setState(prevState => ({ 
-            [e.target.name]: e.target.value 
-        }))
-    }
-
-    componentDidMount() {
-        this.fetchApiToEntries("http://localhost:3000/api/supervisors")
-    }
-
-    fetchApiToEntries = (url) => {
-        fetch(url)
-            .then(res => res.json())
-            .then((entries) => {
-                this.setState({
-                    ...this.state,
-                    entries
-                })
-                console.log(entries)
-            })
-            .catch((error) => console.log(error));
-    }
+    useEffect(() => {
+        fetch(`${URL}/supervisors`)
+        .then((data)=>data.json()).then((val)=>setSelectableOptions(val))
+    }, [])
     
 
-    render() {
-        return (
-            <div className="App">
-                <form onSubmit = { this.handleSubmit }>
-                    <label> Person Name:                         
-                        <br />
-                        <input type="text" placeholder='First Name' name="firstName" onChange= {this.handleChange}/>
-                        <br />
-                        <input type="text" placeholder='Last Name' name="lastName" onChange= {this.handleChange}/>
-                        <br />
-                        <input type="text" placeholder='Email' name="email" onChange= {this.handleChange}/>
-                        <br />
-                        <input type="text" placeholder='Phone' name="phone" onChange= {this.handleChange}/>
-                        <br />
-                        <input type="text" placeholder='Contact Method' name="contactMethod" onChange= {this.handleChange}/>
-                        <br />
-                        <Select options={this.state.selectOptions} />
-                        <input type="text" placeholder='Supervisor' name="supervisor" onChange= {this.handleChange}/>
-                        <br />
-                    </label>
-                    <button type="submit"> Add </button>
-                </form>
-            </div>
-        );
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        axios.post('http://localhost:3000/api/submit', {
+            firstName, lastName, email, phone, preferredMethod, supervisor        
+        })
+        .then(res=>{console.log(res)})
+    setSubmitted(true)
     }
+
+    
+    if (submitted) {
+		return (
+			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+				<h3>Thank you! We'll be in touch shortly.</h3>
+			</div>
+		)
+	}
+    
+    console.log(selectableOptions['firstName'])
+    return (
+        <div className="App">
+            <form onSubmit = { handleSubmit }>
+                <label> Supervisor Notification:                         
+                    <br />
+                    <input type="text" placeholder='First Name' name="firstName" onChange={(e) => setFirstName(e.target.value)} required/>
+                    <br />
+                    <input type="text" placeholder='Last Name' name="lastName" onChange={(e) => setLastName(e.target.value)} required/>
+                    <br />
+                    <label>Preferred Method Email:</label>
+                    <input type="radio" value='Email' name="preferredMethod" onChange={(e) => setPrefferedMethod(e.target.value)} required/>
+                    <br />
+                    <input type="text" placeholder='Email' name="email" onChange={(e) => setEmail(e.target.value)} required/>
+                    <br />
+                    <label>Preferred Method Phone:</label>
+                    <input type="radio" value='Phone' name="preferredMethod" onChange={(e) => setPrefferedMethod(e.target.value)} required/>
+                    <br />
+                    <input type="text" placeholder='Phone' name="phone" onChange={(e) => setPhone(e.target.value)} required/>
+                    <br />
+                    <select onChange={(e) => setSupervisor(e.target.value)}>
+                        {
+                            selectableOptions.map((opt, i) =><option key={i}>{opt.firstName}</option>)
+                        }
+                    </select>
+                    <br />
+                </label>
+                <button type="submit"> Add </button>
+            </form>
+        </div>
+    );
+
 }
 
 
