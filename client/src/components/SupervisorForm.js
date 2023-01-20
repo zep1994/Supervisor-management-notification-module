@@ -24,7 +24,7 @@ class SupervisorForm extends Component{
         axios.post('http://localhost:3000/hello', {
             firstName, lastName, email, phone, contactMethod, supervisor        
         })
-        .then(res=>{console.log(res)})
+        .then(res=>{res.send(res)})
     }
 
     handleChange = (e) => {
