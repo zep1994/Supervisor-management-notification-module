@@ -19,6 +19,10 @@ Commands to follow:
 <br />
 #cd Supervisor-management-notification-module
 <br />
+#docker build -t node-docker .
+<br />
+#docer build -t react-docker .
+<br />
 #docker compose up
 <br />
 Note: I have build docker to handle most of the package installs so you should just have to run the compose command here.
